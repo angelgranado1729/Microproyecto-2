@@ -1,35 +1,41 @@
-//Configuración de la API de The Movie DB
-
-const apiKey = import.meta.env.VITE_APP_THEMOVIEDB_API_KEY;
+// Configuración de la API de The Movie DB
+const apiKey = import.meta.env.VITE_APP_THEMOVIEDB_API_KEY_AUTH;
 const baseUrl = 'https://api.themoviedb.org/3';
 
-const fetchNowPlayingMovies = async () => {
-  const url = `${baseUrl}/movie/now_playing?api_key=${apiKey}`;
-
+export async function fetchMovies() {
   try {
-    const response = await fetch(url);
+    const response = await fetch(`${baseUrl}/movie/now_playing?language=es-US&page=1&api_key=${apiKey}`);
     const data = await response.json();
-    const nowPlayingMovies = data.results;
-    console.log('Películas en cartelera:', nowPlayingMovies);
-    // Realiza las operaciones necesarias con las películas en cartelera
+    console.log(data);
+    return data;
   } catch (error) {
-    console.error('Error al obtener las películas en cartelera:', error);
+    console.error(error);
+    return null;
   }
-};
+}
 
-const fetchUpcomingMovies = async () => {
-  const url = `${baseUrl}/movie/upcoming?api_key=${apiKey}`;
 
+export async function fetchMovieDetail(movieId) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(`${baseUrl}/movie/${movieId}?language=es-US&api_key=${apiKey}`);
     const data = await response.json();
-    const upcomingMovies = data.results;
-    console.log('Próximas películas:', upcomingMovies);
-    // Realiza las operaciones necesarias con las próximas películas
+    console.log(data);
+    return data;
   } catch (error) {
-    console.error('Error al obtener las películas próximamente:', error);
+    console.error(error);
+    return null;
   }
-};
+}
 
-fetchNowPlayingMovies();
-fetchUpcomingMovies();
+export async function fetchUpcomingMovies() {
+  try {
+    const response = await fetch(`${baseUrl}/movie/upcoming?language=es-US&page=1&api_key=${apiKey}`);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
