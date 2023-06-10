@@ -1,0 +1,156 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #242424;
+  color: #fff;
+  position: relative;
+}
+
+.logoContainer {
+  font-size: 1.5rem;
+}
+
+.logo {
+  color: #ff5500;
+  text-decoration: none;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 1.6rem;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navLink {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navLink:hover {
+  color: #ff5500;
+}
+
+.mobileMenu {
+  display: none;
+}
+
+.mobileMenuToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 1.5rem;
+  width: 1.5rem;
+  z-index: 2;
+}
+
+.bar {
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobileMenuContent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #242424;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4rem;
+}
+
+.mobileMenuLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem;
+  list-style: none;
+  width: 100%;
+}
+
+.mobileMenuClose {
+  background: none;
+  border: none;
+  color: #fff;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.closeIcon {
+  font-size: 3.5rem;
+}
+
+.logoutBt,
+.logoutBtDesktop {
+  background-color: #e03434;
+  border: none;
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+
+  border-radius: 4px;
+}
+
+.logoutBt {
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 1.2rem 8rem;
+}
+
+.logoutBtDesktop {
+  padding: 0.2rem 0.4rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.logoutBt:hover {
+  background-color: #f57777;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logoutBtDesktop:hover {
+  background-color: #f57777;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .mobileMenu {
+    display: block;
+  }
+}

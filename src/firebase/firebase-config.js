@@ -23,5 +23,3 @@ export const storage = getStorage(app);
 
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
-
-console.log(import.meta.env.VITE_APP_FIREBASE_API_KEY);

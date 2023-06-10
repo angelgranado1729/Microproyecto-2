@@ -14,15 +14,24 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import "./index.css";
 import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
 import { PublicRoute } from "./components/PublicRoute/PublicRoute";
+import { Layout } from "./components/Layout/Layout";
+
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path={HOME_URL} element={<HomePage />} />
-        <Route path={ERROR_404} element={<NotFoundPage />} />
-        <Route path={LOGIN_URL} element={<LoginPage />} />
-        <Route path={REGISTER_URL} element={<RegisterPage />} />
+        <Route element={<Layout />}>
+          <Route path={HOME_URL} element={<HomePage />} />
+
+
+          <Route path={LOGIN_URL} element={<LoginPage />} />
+          <Route path={REGISTER_URL} element={<RegisterPage />} />
+          <Route path={ERROR_404} element={<NotFoundPage />} />
+
+
+        </Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

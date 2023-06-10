@@ -31,7 +31,7 @@ export function LoginPage() {
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        setLoginError(false); // Reset login error state
+        setLoginError(false);
         await loginWithEmailAndPassword({ userData: formData, onSuccess, onFail });
     };
 
