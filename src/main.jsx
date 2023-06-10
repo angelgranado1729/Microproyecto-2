@@ -8,7 +8,7 @@ import {
   ERROR_404
 } from "./constants/urls";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
-import { LandingPage } from "./pages/LandingPage/LandingPage";
+import { HomePage } from "./pages/HomePage/HomePage";
 import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import "./index.css";
@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path={HOME_URL} element={<LandingPage />} />
+        <Route path={HOME_URL} element={<HomePage />} />
         <Route path={ERROR_404} element={<NotFoundPage />} />
         <Route path={LOGIN_URL} element={<LoginPage />} />
         <Route path={REGISTER_URL} element={<RegisterPage />} />

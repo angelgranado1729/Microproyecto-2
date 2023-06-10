@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 * {
   margin: 0px;
   padding: 0px;
@@ -5,7 +7,7 @@
 }
 
 :root {
-  background-color: #fff9ec;
+  background-color: #181715;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
