@@ -7,7 +7,11 @@ export function PrivateRoute({ children }) {
     const { user, isLoadingUser } = useUserContext();
 
     if (isLoadingUser) {
-        return <h1 className={styles.loadingScreen}>LOADING USER...</h1>;
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.loadingSpinner}></div>
+            </div>
+        );
     }
 
     if (!isLoadingUser && !user) {

@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 105vh;
 }
 
 .container .form {
@@ -13,7 +14,8 @@
   grid-template-columns: 1fr;
   row-gap: 20px;
   background: #333333;
-  margin-top: 32px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .container .form .title {

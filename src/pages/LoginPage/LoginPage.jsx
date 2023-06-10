@@ -23,9 +23,9 @@ export function LoginPage() {
         navigate(HOME_URL);
     };
 
+
     const onFail = (_error) => {
         setLoginError(true);
-        console.log("LOGIN FAILED, Try Again");
     };
 
     const onSubmit = async (event) => {

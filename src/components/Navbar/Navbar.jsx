@@ -24,6 +24,15 @@ export function Navbar() {
         setMobileMenuOpen(false);
     };
 
+    const handleLogout = async () => {
+        try {
+            await logout();
+            // Código adicional después de cerrar sesión
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+        }
+    };
+
     return (
         <nav className={`${styles.navbar} ${isMobileMenuOpen ? styles.open : ''}`}>
             <div className={styles.logoContainer}>
@@ -81,7 +90,7 @@ export function Navbar() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <button className={styles.logoutBt} onClick={logout}>
+                                        <button className={styles.logoutBt} onClick={handleLogout}>
                                             Cerrar Sesión
                                         </button>
                                     </li>
@@ -133,7 +142,7 @@ export function Navbar() {
                             </Link>
                         </li>
                         <li>
-                            <button className={styles.logoutBtDesktop} onClick={logout}>
+                            <button className={styles.logoutBtDesktop} onClick={handleLogout}>
                                 Cerrar Sesión
                             </button>
                         </li>
