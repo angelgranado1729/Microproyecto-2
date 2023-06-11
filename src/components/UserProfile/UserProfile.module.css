@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #1b1b1b;
+}
+
+.userPageTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.userProfile {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.updateButton {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #ff4800;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.updateButton:hover {
+  background-color: #ff570d;
+}

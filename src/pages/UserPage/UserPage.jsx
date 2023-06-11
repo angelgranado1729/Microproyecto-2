@@ -1,6 +1,6 @@
 // src/pages/UserPage/UserPage.jsx
 import React from 'react';
-import UserProfile from '../../components/UserProfile';
+import UserProfile from '../../components/UserProfile/UserProfile';
 import styles from './UserPage.module.css';
 
 export function UserPage() {

@@ -1,8 +1,8 @@
 // la pagina explota si meto el archivo en la carpeta UserProfile no se porque
 import React from 'react';
-import { useUserContext } from '../contexts/UserContext';
-import { updateUser } from '../firebase/users';
-import styles from '../pages/UserPage/UserPage.module.css';
+import { useUserContext } from '../../contexts/UserContext';
+import { updateUser } from '../../firebase/users';
+import styles from './UserProfile.module.css';
 
 function UserProfile() {
   const { user } = useUserContext();
