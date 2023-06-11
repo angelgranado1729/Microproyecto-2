@@ -1,66 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { ImageCarousel } from "../../components/ImageCarousel/ImageCarousel";
+import { Card } from "../../components/Card/Card";
+import { useMovies } from "../../hooks/useMovies";
+import SearchBar from "../../components/SearchBar/SearchBar";
 import image1 from "../../assets/image1.jpeg";
 import image2 from "../../assets/image2.jpeg";
 import image3 from "../../assets/image3.jpeg";
 import image4 from "../../assets/image4.jpeg";
 import image5 from "../../assets/image5.jpeg";
-import { useMovies } from "../../hooks/useMovies";
-import styles from "./HomePage.module.css";
-import { Card } from "../../components/Card/Card";
-import { Loading } from "../../components/Loading/Loading";
-import { Link } from "react-router-dom";
-import { MOVIE_DETAIL_URL } from "../../constants/urls";
+import image6 from "../../assets/image6.jpeg";
+import image7 from "../../assets/image7.jpeg";
+import image8 from "../../assets/image8.jpeg";
 
 export function HomePage() {
-    const [images, setImages] = useState([]);
+  const [images, setImages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { nowPlayingMovies, getNowPlayingMovies } = useMovies();
 
-    const {
-        isLoading,
-        nowPlayingMovies,
-        getNowPlayingMovies,
-        upComingMovies,
-        getUpComingMovies,
-        movieDetails,
-        getMovieDetails
-    } = useMovies();
+  useEffect(() => {
+    setImages([image1, image2, image3, image4, image5, image6, image7, image8]);
+    getNowPlayingMovies();
+  }, [getNowPlayingMovies]);
 
-    useEffect(() => {
-        getNowPlayingMovies();
-    }, [getNowPlayingMovies]);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
 
-    useEffect(() => {
-        getUpComingMovies();
-    }, [getUpComingMovies]);
+  const filteredMovies = nowPlayingMovies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    useEffect(() => {
-        getMovieDetails(385687);
-    }, [getMovieDetails]);
-
-
-    useEffect(() => {
-        // Fetch the list of images from the server (remember from firestore)
-        setImages([image1, image2, image3, image4, image5]);
-    }, []);
-
-    const movieList = nowPlayingMovies.concat(upComingMovies);
-
-    return (
-        <div className={styles.container}>
-            <div className={styles.container}>
-                <div className={styles.carruselContainer}>
-                    <ImageCarousel images={images} />
-                </div>
-                <div className={styles.moviesContainer}>
-                    {isLoading ? (
-                        <Loading />
-                    ) : (
-                        movieList.map((movie) => (
-                            <Card movie={movie} key={movie.id} />
-                        ))
-                    )}
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <>
+      <ImageCarousel images={images} />
+      <SearchBar onSearch={handleSearch} />
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {filteredMovies.map((movie) => (
+          <div key={movie.id} style={{ margin: "0.5rem" }}>
+            <Card movie={movie} />
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
