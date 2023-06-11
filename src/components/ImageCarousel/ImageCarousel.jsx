@@ -18,7 +18,7 @@ export function ImageCarousel({ images }) {
     <div className={styles.imageCarousel}>
       <div
         className={styles.carouselInner}
-        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+        style={{ transform: `translateX(-${currentImageIndex * 32}%)` }}
       >
         {images.map((image, index) => (
           <img key={index} src={image} alt={`Image ${index}`} />
