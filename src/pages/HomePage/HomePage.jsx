@@ -33,33 +33,30 @@ export function HomePage() {
         getUpComingMovies();
     }, [getUpComingMovies]);
 
-    useEffect(() => {
-        getMovieDetails(385687);
-    }, [getMovieDetails]);
-
 
     useEffect(() => {
         // Fetch the list of images from the server (remember from firestore)
         setImages([image1, image2, image3, image4, image5]);
     }, []);
 
-    const movieList = nowPlayingMovies.concat(upComingMovies);
-
     return (
         <div className={styles.container}>
-            <div className={styles.container}>
-                <div className={styles.carruselContainer}>
-                    <ImageCarousel images={images} />
-                </div>
-                <div className={styles.moviesContainer}>
-                    {isLoading ? (
-                        <Loading />
-                    ) : (
-                        movieList.map((movie) => (
+            <div className={styles.carruselContainer}>
+                <ImageCarousel images={images} />
+            </div>
+            <div className={styles.moviesContainer}>
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        {nowPlayingMovies.map((movie) => (
                             <Card movie={movie} key={movie.id} />
-                        ))
-                    )}
-                </div>
+                        ))}
+                        {upComingMovies.map((movie) => (
+                            <Card movie={movie} key={movie.id} />
+                        ))}
+                    </>
+                )}
             </div>
         </div>
     );

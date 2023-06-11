@@ -1,0 +1,14 @@
+.container {
+  background: #1b1b1b;
+}
+
+.moviesContainer {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 10px));
+  align-items: center;
+  justify-content: center;
+  column-gap: 4px;
+  row-gap: 2px;
+}
