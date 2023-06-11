@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { ImageCarousel } from "../../components/ImageCarousel/ImageCarousel";
 import { Card } from "../../components/Card/Card";
 import { useMovies } from "../../hooks/useMovies";
@@ -8,9 +9,7 @@ import image2 from "../../assets/image2.jpeg";
 import image3 from "../../assets/image3.jpeg";
 import image4 from "../../assets/image4.jpeg";
 import image5 from "../../assets/image5.jpeg";
-import { useMovies } from "../../hooks/useMovies";
 import styles from "./HomePage.module.css";
-import { Card } from "../../components/Card/Card";
 import { Loading } from "../../components/Loading/Loading";
 import { Link } from "react-router-dom";
 import { MOVIE_DETAIL_URL } from "../../constants/urls";
