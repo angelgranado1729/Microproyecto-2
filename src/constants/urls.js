@@ -10,4 +10,5 @@ export const MOVIE_DETAIL_URL = "/movies/:movie_id";
 export const ADMIN_URL = "/admin";
 export const RESERVE_URL = "/reserve";
 export const ERROR_404 = "*";
-export const MOVIES_DETAIL_URL = (movie_id = ":movie_id") => `/movies/${movie_id}`;
+export const MOVIES_DETAIL_URL =  (movieId = ":Id") =>
+`/movies/${movieId}`;

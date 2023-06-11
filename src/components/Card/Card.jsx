@@ -4,32 +4,35 @@ import { Link } from "react-router-dom";
 import { MOVIE_DETAIL_URL } from "../../constants/urls";
 
 export function Card({ movie }) {
+    const imageUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+
     return (
-        <div className={styles.container} onClick={MOVIE_DETAIL_URL(movie.id)}>
-            <div>
-                <img
-                    src={movie.poster_path}
-                    alt={movie.title}
-                    className={styles.image}
-                />
-            </div>
-            <div className={styles.rightSideContainer}>
-                <div className={styles.infoContainer}>
-                    <h2 className={styles.title}>
-                        <Link
-                            to={MOVIE_DETAIL_URL(movie.id)}
-                            className={styles.link}
-                        >
+        <div className={styles.container}>
+            <div className={styles.card}>
+                <div className={styles.front}>
+                    <img src={imageUrl} alt={movie.title} className={styles.image} />
+                </div>
+                <div className={styles.back}>
+                    <div className={styles.infoContainer}>
+                        <h3 className={styles.title}>
                             {movie.title}
-                        </Link>
-                    </h2>
-                    <div className={styles.genreRow}>
-                        <h3 className={styles.genre}>{movie.genre}</h3>
-                        <h3 className={styles.language}>{movie.language}</h3>
+                            <Link to={`${MOVIE_DETAIL_URL}/${movie.id}`} className={styles.link}>
+                                <span className={styles.linkText}>Ver más</span>
+                            </Link>
+                        </h3>
+                        <div className={styles.info}>
+                            <ul className={styles.infoList}>
+                                <li className={styles.infoItem}>
+                                    <span className={styles.infoTitle}>Idioma: {movie.original_language}</span>
+                                </li>
+                                <li className={styles.infoItem}>
+                                    <span className={styles.infoTitle}>Géneros: {movie.genre_ids}</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-

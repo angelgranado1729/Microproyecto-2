@@ -6,6 +6,7 @@
   background-color: #242424;
   color: #fff;
   position: relative;
+  z-index: 1;
 }
 
 .logoContainer {
