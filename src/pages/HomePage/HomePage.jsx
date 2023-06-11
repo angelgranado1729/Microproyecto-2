@@ -1,15 +1,51 @@
-import { useEffect } from "react";
-import "./HomePage";
-import { SeatBooking } from "../../components/SeatBooking/SeatBooking";
-import { ReservePage } from "../ReservePage/ReservePage";
-import { fetchMovies } from "../../utils/requests";
+import React, { useEffect } from "react";
+import { useMovies } from "../../hooks/useMovies";
+import styles from "./HomePage.module.css";
+import { Card } from "../../components/Card/Card";
+
 
 export function HomePage() {
+    const {
+        isLoading,
+        nowPlayingMovies,
+        getNowPlayingMovies,
+        upComingMovies,
+        getUpComingMovies,
+        movieDetails,
+        getMovieDetails
+    } = useMovies();
+
+    useEffect(() => {
+        getNowPlayingMovies();
+    }, [getNowPlayingMovies]);
+
+    useEffect(() => {
+        getUpComingMovies();
+    }, [getUpComingMovies]);
+
+    useEffect(() => {
+        getMovieDetails(385687);
+    }, [getMovieDetails]);
+
+    console.log("movieDetails", movieDetails);
+
     return (
         <>
-            <p>Landing Page</p>
-            <ReservePage />
+
+
+
+            <div className={styles.container}>
+
+                {/* {Aqui vamos a poner el hero} */}
+                <div className={styles.heroContainer}>
+                </div>
+
+                /</div>
+
+
+
 
         </>
+
     );
 }

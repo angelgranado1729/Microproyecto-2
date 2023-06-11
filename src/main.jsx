@@ -9,7 +9,9 @@ import {
   MOVIES_DETAIL_URL,
   ADMIN_URL,
   PROFILE_URL,
-  RESERVE_URL
+  RESERVE_URL,
+  UPCOMING_MOVIES_URL,
+  NOW_PLAYING_MOVIES_URL
 } from "./constants/urls";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 import { HomePage } from "./pages/HomePage/HomePage";
@@ -23,6 +25,7 @@ import { AdminPage } from "./pages/AdminPage/AdminPage";
 import { MovieDetailPage } from "./pages/MovieDetailPage/MovieDetailPage";
 import { UserPage } from "./pages/UserPage/UserPage";
 import { ReservePage } from "./pages/ReservePage/ReservePage";
+import { UpComingPage } from "./pages/UpComingPage/UpComingPage";
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -39,9 +42,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           />
 
 
+          <Route path={UPCOMING_MOVIES_URL}
+            element={
+              <PublicRoute>
+                <UpComingPage />
+              </PublicRoute>
+            }
+          />
+
           <Route path={MOVIES_DETAIL_URL()}
             element={
-              <MovieDetailPage />
+              <PublicRoute>
+                <MovieDetailPage />
+              </PublicRoute>
             }
           />
 
@@ -95,5 +108,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode >,
 )
