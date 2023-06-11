@@ -1,19 +1,18 @@
 .imageCarousel {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
   height: 400px;
   width: 100%;
-  overflow: hidden;
+}
+
+.carouselInner {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
 }
 
 .imageCarousel img {
   height: 100%;
   width: auto;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.active {
-  opacity: 1;
+  flex-shrink: 0;
 }
