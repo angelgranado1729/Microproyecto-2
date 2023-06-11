@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ImageCarousel } from "../../components/ImageCarousel/ImageCarousel";
+import { Card } from "../../components/Card/Card";
+import { useMovies } from "../../hooks/useMovies";
+import SearchBar from "../../components/SearchBar/SearchBar";
 import image1 from "../../assets/image1.jpeg";
 import image2 from "../../assets/image2.jpeg";
 import image3 from "../../assets/image3.jpeg";
@@ -14,34 +17,21 @@ import { MOVIE_DETAIL_URL } from "../../constants/urls";
 
 export function HomePage() {
     const [images, setImages] = useState([]);
-
-    const {
-        isLoading,
-        nowPlayingMovies,
-        getNowPlayingMovies,
-        upComingMovies,
-        getUpComingMovies,
-        movieDetails,
-        getMovieDetails
-    } = useMovies();
-
-    useEffect(() => {
-        getNowPlayingMovies();
-    }, [getNowPlayingMovies]);
-
-    useEffect(() => {
-        getUpComingMovies();
-    }, [getUpComingMovies]);
-
-    useEffect(() => {
-        getMovieDetails(385687);
-    }, [getMovieDetails]);
-
+    const [searchQuery, setSearchQuery] = useState("");
+    const { nowPlayingMovies, getNowPlayingMovies } = useMovies();
 
     useEffect(() => {
         // Fetch the list of images from the server (remember from firestore)
         setImages([image1, image2, image3, image4, image5]);
     }, []);
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+    };
+
+    const filteredMovies = nowPlayingMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const movieList = nowPlayingMovies.concat(upComingMovies);
 
@@ -50,6 +40,12 @@ export function HomePage() {
             <div className={styles.container}>
                 <div className={styles.carruselContainer}>
                     <ImageCarousel images={images} />
+                    <SearchBar onSearch={handleSearch} />
+                    <div>
+                        {filteredMovies.map((movie) => (
+                            <Card key={movie.id} movie={movie} />
+                        ))}
+                    </div>
                 </div>
                 <div className={styles.moviesContainer}>
                     {isLoading ? (
