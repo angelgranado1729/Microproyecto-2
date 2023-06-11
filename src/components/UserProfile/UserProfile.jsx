@@ -1,16 +1,25 @@
-// la pagina explota si meto el archivo en la carpeta UserProfile no se porque
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../contexts/UserContext';
 import { updateUser } from '../../firebase/users';
 import styles from './UserProfile.module.css';
 
 function UserProfile() {
   const { user } = useUserContext();
-  const [name, setName] = React.useState(user.name);
-  const [age, setAge] = React.useState(user.age);
+  const [name] = useState(user.name);
+  const [age, setAge] = useState(user.age);
+  const [hasUpdatedAge, setHasUpdatedAge] = useState(false);
+
+  useEffect(() => {
+    if (user.age > 0) {
+      setHasUpdatedAge(true);
+    }
+  }, [user.age]);
 
   const handleUpdateProfile = async () => {
-    await updateUser(user.id, { name, age });
+    if (!hasUpdatedAge && age > 0) {
+      await updateUser(user.id, { age });
+      setHasUpdatedAge(true);
+    }
   };
 
   return (
@@ -20,13 +29,9 @@ function UserProfile() {
         <label htmlFor="name" className={styles.label}>
           Nombre:
         </label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className={styles.input}
-        />
+        <span id="name" className={styles.nameDisplay}>
+          {name}
+          </span>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="age" className={styles.label}>
@@ -36,8 +41,9 @@ function UserProfile() {
           type="number"
           id="age"
           value={age}
-          onChange={(e) => setAge(e.target.value)}
+          onChange={(e) => setAge(Math.max(0, e.target.value))}
           className={styles.input}
+          disabled={hasUpdatedAge}
         />
       </div>
       <button onClick={handleUpdateProfile} className={styles.updateButton}>
