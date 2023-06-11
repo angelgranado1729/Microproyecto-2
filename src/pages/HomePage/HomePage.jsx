@@ -8,6 +8,10 @@ import image2 from "../../assets/image2.jpeg";
 import image3 from "../../assets/image3.jpeg";
 import image4 from "../../assets/image4.jpeg";
 import image5 from "../../assets/image5.jpeg";
+import image6 from "../../assets/image6.jpeg";
+import image7 from "../../assets/image7.jpeg";
+import image8 from "../../assets/image8.jpeg";
+
 
 export function HomePage() {
   const [images, setImages] = useState([]);
@@ -15,7 +19,7 @@ export function HomePage() {
   const { nowPlayingMovies, getNowPlayingMovies } = useMovies();
 
   useEffect(() => {
-    setImages([image1, image2, image3, image4, image5]);
+    setImages([image1, image2, image3, image4, image5 , image6 , image7 , image8]);
     getNowPlayingMovies();
   }, [getNowPlayingMovies]);
 
