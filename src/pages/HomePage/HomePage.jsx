@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./HomePage";
 import { SeatBooking } from "../../components/SeatBooking/SeatBooking";
 import { ReservePage } from "../ReservePage/ReservePage";
@@ -11,22 +11,19 @@ export function HomePage() {
     useEffect(() => {
       // Fetch the list of images from the server (remember from firestore)
       setImages([
-        "src/assets/images/1.jpg",
-        "src/assets/images/2.jpg",
-        "src/assets/images/3.jpg",
-        "src/assets/images/4.jpg",
-        "src/assets/images/5.jpg",
+        "src/assets/image1.jpeg",
+        "src/assets/image2.jpeg",
+        "src/assets/image3.jpeg",
+        "src/assets/image4.jpeg",
+        "src/assets/image5.jpeg",
       ]);
     }, []);
   
     return (
         <>
             <p>Landing Page</p>
-            <ReservePage />
             <ImageCarousel images={images} />
-            <p>Landing Page</p>
-            <ReservePage />
-            
+            <p>Landing Page</p>            
 
         </>
     );

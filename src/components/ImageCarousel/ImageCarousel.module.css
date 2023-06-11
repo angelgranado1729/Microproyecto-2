@@ -1,4 +1,4 @@
-.image-carousel {
+.imageCarousel {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,13 +7,13 @@
     overflow: hidden;
   }
   
-  .image-carousel img {
+  .imageCarousel img {
     height: 100%;
     width: auto;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
   }
   
-  .image-carousel img.active {
+  .imageCarousel img.active {
     opacity: 1;
   }

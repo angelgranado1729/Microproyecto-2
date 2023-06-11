@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import "./ImageCarousel.css";
+import styles from "./ImageCarousel.module.css";
 
 export function ImageCarousel({ images }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -15,7 +15,7 @@ export function ImageCarousel({ images }) {
   }, [currentImageIndex]);
 
   return (
-    <div className="image-carousel">
+    <div className={styles.imageCarousel}>
       {images.map((image, index) => (
         <img
           key={index}
