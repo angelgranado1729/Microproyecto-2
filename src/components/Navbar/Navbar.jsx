@@ -64,11 +64,6 @@ export function Navbar() {
                                     Próximamente
                                 </Link>
                             </li>
-                            <li>
-                                <Link to={NOW_PLAYING_MOVIES_URL} className={styles.navLink} onClick={handleCloseMobileMenu}>
-                                    Cartelera
-                                </Link>
-                            </li>
                             {!user ? (
                                 <>
                                     <li>
@@ -114,11 +109,6 @@ export function Navbar() {
                 <li>
                     <Link to={UPCOMING_MOVIES_URL} className={styles.navLink}>
                         Próximamente
-                    </Link>
-                </li>
-                <li>
-                    <Link to={NOW_PLAYING_MOVIES_URL} className={styles.navLink}>
-                        Cartelera
                     </Link>
                 </li>
                 {!user ? (
