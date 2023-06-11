@@ -22,7 +22,7 @@ dist-ssr
 .env.development.local
 .env.test.local
 *.suo
-*.ntvs*
+.ntvs
 *.njsproj
 *.sln
 *.sw?
@@ -32,3 +32,4 @@ dist-ssr
 .env.local
 .env.development.local
 .env.test.local
+
