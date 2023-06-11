@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import styles from "./ImageCarousel.module.css";
 
@@ -10,7 +9,7 @@ export function ImageCarousel({ images }) {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(handleImageCarouselTick, 5000);
+    const intervalId = setInterval(handleImageCarouselTick, 2500);
     return () => clearInterval(intervalId);
   }, [currentImageIndex]);
 
@@ -21,7 +20,7 @@ export function ImageCarousel({ images }) {
           key={index}
           src={image}
           alt={`Image ${index}`}
-          className={index === currentImageIndex ? "active" : ""}
+          className={index === currentImageIndex ? styles.active : ""}
         />
       ))}
     </div>
