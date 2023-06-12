@@ -1,10 +1,10 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useMovies } from "../../hooks/useMovies";
 import styles from "./MovieDetailPage.module.css";
 import { Loading } from "../../components/Loading/Loading";
-import { useUserContext } from '../../contexts/UserContext';
-import { LOGIN_URL } from "../../constants/urls";
+import { useUserContext } from "../../contexts/UserContext";
+import { LOGIN_URL, RESERVE_URL } from "../../constants/urls";
 
 export function MovieDetailPage() {
     const IMAGE_URL_BASE = "https://www.themoviedb.org/t/p/w220_and_h330_face";
@@ -50,7 +50,6 @@ export function MovieDetailPage() {
             (crew) => crew.department === "Directing" && crew.job === "Director"
         );
 
-
     if (isLoading) {
         return (
             <div className={styles.container}>
@@ -88,9 +87,23 @@ export function MovieDetailPage() {
                             </button>
                         </Link>
                     ) : (
-                        <button className={styles.favoriteButton} onClick={handleFavoriteClick}>
+                        <button
+                            className={styles.favoriteButton}
+                            onClick={handleFavoriteClick}
+                        >
                             {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                         </button>
+                    )}
+                    {user ? (
+                        <Link to={RESERVE_URL} className={styles.link}>
+                            <button className={styles.reserveButton}>Reserve</button>
+                        </Link>
+                    ) : (
+                        <Link to={LOGIN_URL} className={styles.link}>
+                            <button className={styles.reserveButton}>
+                                Login to Reserve
+                            </button>
+                        </Link>
                     )}
                 </div>
 
@@ -99,7 +112,8 @@ export function MovieDetailPage() {
                     <p className={styles.overview}>{overview}</p>
                     <div className={styles.info}>
                         <p className={styles.infoItem}>
-                            <span className={styles.infoTitle}>Fecha de estreno:</span> {release_date}
+                            <span className={styles.infoTitle}>Fecha de estreno:</span>{" "}
+                            {release_date}
                         </p>
                         <p className={styles.infoItem}>
                             <span className={styles.infoTitle}>Duración:</span> {runtime} minutes
@@ -118,13 +132,11 @@ export function MovieDetailPage() {
                         </p>
                         <p className={styles.infoItem}>
                             <span className={styles.infoTitle}>Actores:</span>{" "}
-                            {actors &&
-                                actors.map((actor) => actor.name).join(", ")}
+                            {actors && actors.map((actor) => actor.name).join(", ")}
                         </p>
                         {director && (
                             <p className={styles.infoItem}>
-                                <span className={styles.infoTitle}>Director:</span>{" "}
-                                {director.name}
+                                <span className={styles.infoTitle}>Director:</span> {director.name}
                             </p>
                         )}
                     </div>

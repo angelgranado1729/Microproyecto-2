@@ -70,7 +70,10 @@ export function SeatBooking() {
             </div>
             <div className={styles['selected-seats']}>
                 <h3>Selected Seats:</h3>
-                {selectedSeats.length === 0 ? <p>No seats selected</p> : selectedSeats.map((seat) => <span key={seat} onClick={() => handleSeatClick(seat)}>{seat}</span>)}
+                {selectedSeats.length === 0 ?
+                    <p>No seats selected</p> : selectedSeats.map((seat) =>
+                        <span key={seat} onClick={() => handleSeatClick(seat)}>
+                            {seat}</span>)}
             </div>
         </div>
     );
