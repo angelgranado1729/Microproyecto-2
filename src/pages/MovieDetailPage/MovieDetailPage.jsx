@@ -78,9 +78,6 @@ export function MovieDetailPage() {
         }
     }, []);
 
-    // Acceder al valor de seatsCount a través de seatsCountRef.current
-    console.log(seatsCountRef.current);
-
     const getReservationButton = () => {
         if (isUpComingMovie) {
             return <div className={styles.upcomingButton}>Próximamente</div>;
