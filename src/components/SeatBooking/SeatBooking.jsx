@@ -3,17 +3,14 @@ import styles from "./SeatBooking.module.css";
 import { upDateBoletosVendidos } from '../../utils/fireStoreHelpers';
 import { useNavigate } from 'react-router-dom';
 import { HOME_URL } from '../../constants/urls';
-
-
-
+import { Loading } from "../../components/Loading/Loading";
 
 export function SeatBooking({ asientosOcupados, price, movieId }) {
     const maxCapacity = 5;
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [isMapLoading, setIsMapLoading] = useState(true);
     const navigate = useNavigate();
-
-
 
     useEffect(() => {
         const calculateTotalPrice = () => {
@@ -38,6 +35,14 @@ export function SeatBooking({ asientosOcupados, price, movieId }) {
     const isSeatSelected = (seat) => {
         return selectedSeats.includes(seat);
     };
+
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            setIsMapLoading(false);
+        }, 3000);
+
+        return () => clearTimeout(delay);
+    }, []);
 
     const renderSeats = () => {
         const rows = ['1', '2', '3', '4', '5'];
@@ -72,15 +77,18 @@ export function SeatBooking({ asientosOcupados, price, movieId }) {
     };
 
     const handleConfirmReservation = async () => {
-
         try {
             await upDateBoletosVendidos(movieId, selectedSeats);
-            navigate('/');
+            navigate(HOME_URL);
             alert(`Ha reservado ${selectedSeats.length} asientos por un total de $${totalPrice.toFixed(3)}`);
         } catch (error) {
             console.error(error);
         }
     };
+
+    if (isMapLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className={styles['seat-booking-container']}>
@@ -124,19 +132,13 @@ export function SeatBooking({ asientosOcupados, price, movieId }) {
                     <p>Seleccionado</p>
                 </div>
             </div>
-            {selectedSeats.length === 0 ?
-                (
-                    <button
-                        className={styles.disabledButton}>
-                        Selecciona un asiento
-                    </button>
-                ) :
-                (
-                    <button onClick={
-                        () => handleConfirmReservation()}
-                        className={styles.confirmButton}>
-                        Confirmar reserva
-                    </button>)}
+            {selectedSeats.length === 0 ? (
+                <button className={styles.disabledButton}>Selecciona un asiento</button>
+            ) : (
+                <button onClick={handleConfirmReservation} className={styles.confirmButton}>
+                    Confirmar reserva
+                </button>
+            )}
         </div>
     );
 }
