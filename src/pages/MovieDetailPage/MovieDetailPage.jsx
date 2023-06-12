@@ -6,6 +6,7 @@ import { Loading } from "../../components/Loading/Loading";
 import { useUserContext } from "../../contexts/UserContext";
 import { LOGIN_URL, RESERVE_URL } from "../../constants/urls";
 import { getFuncionById } from "../../utils/fireStoreHelpers";
+import { addMovieToFavorites, removeMovieFromFavorites } from "../../utils/fireStoreHelpers";
 
 export function MovieDetailPage() {
     const IMAGE_URL_BASE = "https://www.themoviedb.org/t/p/w220_and_h330_face";
@@ -36,10 +37,24 @@ export function MovieDetailPage() {
 
     const [isFavorite, setIsFavorite] = useState(false);
 
-    const handleFavoriteClick = () => {
+    const handleFavoriteClick = async () => {
+        if (!isFavorite) {
+          await addMovieToFavorites(user.id, movieDetails);
+        } else {
+          await removeMovieFromFavorites(user.id, movieDetails.id);
+        }
         setIsFavorite(!isFavorite);
-    };
-
+      };
+      
+      useEffect(() => {
+        if (user && movieDetails && user.favoriteMovies) {
+          const isFav = user.favoriteMovies.some(
+            (favoriteMovie) => favoriteMovie.id === movieDetails.id
+          );
+          setIsFavorite(isFav);
+        }
+      }, [user, movieDetails]);
+      
     useEffect(() => {
         if (!isLoading && movie_id) {
             getMovieDetails(movie_id);

@@ -1,19 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../../contexts/UserContext';
 import { updateUser } from '../../firebase/users';
+import { auth } from '../../firebase/firebase-config';
+import { getUserReservations, getFavoriteMovies } from '../../utils/fireStoreHelpers';
 import styles from './UserProfile.module.css';
+import { Card } from '../Card/Card';
 
 function UserProfile() {
   const { user } = useUserContext();
+  const userId = auth.currentUser.uid;
   const [name] = useState(user.name);
   const [age, setAge] = useState(user.age);
   const [hasUpdatedAge, setHasUpdatedAge] = useState(false);
+  const [reservations, setReservations] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
 
   useEffect(() => {
     if (user.age > 0) {
       setHasUpdatedAge(true);
     }
   }, [user.age]);
+
+  useEffect(() => {
+    const fetchReservations = async () => {
+      const userReservations = await getUserReservations(userId);
+      if (userReservations) {
+        setReservations(userReservations.reservations);
+      }
+    };
+
+    const fetchFavoriteMovies = async () => {
+      const userFavoriteMovies = await getFavoriteMovies(userId);
+      if (userFavoriteMovies) {
+        setFavoriteMovies(userFavoriteMovies);
+      }
+    };
+
+    fetchReservations();
+    fetchFavoriteMovies();
+  }, [userId]);
 
   const handleUpdateProfile = async () => {
     if (!hasUpdatedAge && age > 0) {
@@ -31,7 +56,7 @@ function UserProfile() {
         </label>
         <span id="name" className={styles.nameDisplay}>
           {name}
-          </span>
+        </span>
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="age" className={styles.label}>
@@ -49,6 +74,25 @@ function UserProfile() {
       <button onClick={handleUpdateProfile} className={styles.updateButton}>
         Actualizar perfil
       </button>
+      <h2>Películas favoritas</h2>
+      <div className={styles.favoriteMoviesContainer}>
+        {favoriteMovies.map((movie, index) => (
+          <Card key={index} movie={movie} />
+        ))}
+      </div>
+      <ul>
+        {favoriteMovies.map((movie, index) => (
+          <li key={index}>{movie.title}</li>
+        ))}
+      </ul>
+      <h2>Reservas</h2>
+      <ul>
+        {reservations.map((reservation, index) => (
+          <li key={index}>
+            Película: {reservation.movieTitle} - Asientos: {reservation.seats.join(', ')}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

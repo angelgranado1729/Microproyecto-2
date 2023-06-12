@@ -10,6 +10,7 @@
 .userPageTitle {
   font-size: 2rem;
   margin-bottom: 1rem;
+  color: #1b1b1b;
 }
 
 .userProfile {
@@ -50,4 +51,9 @@
 
 .updateButton:hover {
   background-color: #ff570d;
+}
+.favoriteMoviesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }

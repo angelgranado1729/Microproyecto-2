@@ -89,3 +89,58 @@ export async function handleFunciones(movie_Id, title_movie) {
     throw new Error("Error al obtener la función");
   }
 }
+export async function getUserReservations(userId) {
+  try {
+    const docRef = doc(db, 'reservations', userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error al obtener las reservas del usuario:', error);
+    throw new Error('Error al obtener las reservas del usuario');
+  }
+}
+export async function getFavoriteMovies(userId) {
+  try {
+    const favMovieQuery = query(
+      collection(db, 'favMovie'),
+      where('userId', '==', userId)
+    );
+    const querySnapshot = await getDocs(favMovieQuery);
+    const favoriteMovies = [];
+    querySnapshot.forEach((doc) => {
+      favoriteMovies.push(doc.data());
+    });
+    return favoriteMovies;
+  } catch (error) {
+    console.error('Error al obtener películas favoritas:', error);
+    throw new Error('Error al obtener películas favoritas');
+  }
+}
+
+export const addMovieToFavorites = async (userId, movie) => {
+  const userRef = firestore.collection("users").doc(userId);
+  await userRef.update({
+    favoriteMovies: firebase.firestore.FieldValue.arrayUnion(movie),
+  });
+};
+
+export const removeMovieFromFavorites = async (userId, movieId) => {
+  const userRef = firestore.collection("users").doc(userId);
+  const userSnapshot = await userRef.get();
+  const userData = userSnapshot.data();
+  const updatedFavoriteMovies = userData.favoriteMovies.filter(
+    (movie) => movie.id !== movieId
+  );
+
+  await userRef.update({
+    favoriteMovies: updatedFavoriteMovies,
+  });
+};
+

@@ -8,9 +8,9 @@ import {
     getDocs,
     query,
     where,
+    deleteDoc
   } from "firebase/firestore";
   import { db } from "../firebase-config";
-  
   export const USERS_COLLECTION = "users";
   
   export async function createUser(data) {
@@ -50,4 +50,29 @@ import {
     }
   
     return null;
+  }
+
+
+  
+  export async function addFavoriteMovie(userId, movie) {
+    try {
+      const favMovieCollectionRef = collection(db, 'favMovie');
+      await addDoc(favMovieCollectionRef, {
+        ...movie,
+        userId,
+      });
+    } catch (error) {
+      console.error('Error al agregar película favorita:', error);
+      throw new Error('Error al agregar película favorita');
+    }
+  }
+  
+  export async function removeFavoriteMovie(movieId) {
+    try {
+      const movieDocRef = doc(db, 'favMovie', movieId);
+      await deleteDoc(movieDocRef);
+    } catch (error) {
+      console.error('Error al eliminar película favorita:', error);
+      throw new Error('Error al eliminar película favorita');
+    }
   }
