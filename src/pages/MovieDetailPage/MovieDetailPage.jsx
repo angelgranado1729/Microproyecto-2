@@ -35,6 +35,7 @@ export function MovieDetailPage() {
     } = movieDetails || {};
 
     const [isFavorite, setIsFavorite] = useState(false);
+    const [isSeatsCountLoading, setIsSeatsCountLoading] = useState(true);
 
     const handleFavoriteClick = () => {
         setIsFavorite(!isFavorite);
@@ -70,9 +71,11 @@ export function MovieDetailPage() {
     useEffect(() => {
         if (!isUpComingMovie) {
             const getNumberOfSeats = async () => {
+                setIsSeatsCountLoading(true);
                 const num = await numberOfSeats();
                 console.log(num);
                 seatsCountRef.current = num;
+                setIsSeatsCountLoading(false);
             };
             getNumberOfSeats();
         }
@@ -82,7 +85,9 @@ export function MovieDetailPage() {
         if (isUpComingMovie) {
             return <div className={styles.upcomingButton}>Próximamente</div>;
         } else {
-            if (seatsCountRef.current >= 20) {
+            if (isSeatsCountLoading) {
+                return <Loading />;
+            } else if (seatsCountRef.current >= 20) {
                 return <div className={styles.reserveButonAgotado}>Agotado</div>;
             } else {
                 if (user) {
@@ -132,7 +137,7 @@ export function MovieDetailPage() {
             (crew) => crew.department === "Directing" && crew.job === "Director"
         );
 
-    if (isLoading) {
+    if (isLoading || isSeatsCountLoading) {
         return (
             <div className={styles.container}>
                 <Loading />
