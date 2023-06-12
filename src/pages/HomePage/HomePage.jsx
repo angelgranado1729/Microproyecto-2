@@ -52,7 +52,6 @@ export function HomePage() {
         return title.includes(query) && allMovies.findIndex((m) => m.id === movie.id) === index;
     });
 
-    console.log("filteredMovies", filteredMovies.length);
     return (
         <div className={styles.container}>
             <div className={styles.carruselContainer}>

@@ -44,7 +44,7 @@ export function Card({ movie }) {
                             </span>
                             <div className={styles.linkContainer}>
                                 <h3 className={styles.title}>
-                                    <Link to={`${MOVIE_DETAIL_URL}/${movie.id}`} className={styles.link}>
+                                    <Link to={MOVIE_DETAIL_URL.replace(":movie_id", movie.id)} className={styles.link}>
                                         <span className={styles.linkText}>Ver más</span>
                                     </Link>
                                 </h3>

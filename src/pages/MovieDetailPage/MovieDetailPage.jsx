@@ -1,67 +1,132 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useMovies } from "../../hooks/useMovies";
 import styles from "./MovieDetailPage.module.css";
+import { Loading } from "../../components/Loading/Loading";
+import { useUserContext } from '../../contexts/UserContext';
+import { LOGIN_URL } from "../../constants/urls";
 
 export function MovieDetailPage() {
     const IMAGE_URL_BASE = "https://www.themoviedb.org/t/p/w220_and_h330_face";
-    const { movieId } = useParams();
+    const { movie_id } = useParams();
     const {
         isLoading,
-        upComingMovies,
-        nowPlayingMovies,
+        getMovieDetails,
         movieDetails,
-        getUpComingMovies,
-        getNowPlayingMovies,
-        getMovieDetails
-    } = useMovies() || {};
+        movieCredits,
+        getMovieCredits,
+    } = useMovies();
+
+    const { user } = useUserContext();
+
     const {
-        id,
-        original_language,
+        spoken_languages,
+        genres,
+        title,
         overview,
         poster_path,
         release_date,
         runtime,
         status,
-        title
     } = movieDetails || {};
+
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const handleFavoriteClick = () => {
+        setIsFavorite(!isFavorite);
+    };
+
     useEffect(() => {
-        if (!isLoading && movieId) {
-            getMovieDetails(movieId);
+        if (!isLoading && movie_id) {
+            getMovieDetails(movie_id);
+            getMovieCredits(movie_id);
         }
     }, []);
+
+    const actors = movieCredits?.cast;
+    const director =
+        movieCredits?.crew &&
+        movieCredits.crew.find(
+            (crew) => crew.department === "Directing" && crew.job === "Director"
+        );
+
+
     if (isLoading) {
         return (
             <div className={styles.container}>
-                <h1 className={styles.loadingTxt}>Loading...</h1>
+                <Loading />
             </div>
         );
     }
-    if (!isLoading && !character) {
+
+    if (!movieDetails && !isLoading) {
         return (
             <div className={styles.container}>
-                <h1 className={styles.loadingTxt}>NOT FOUND DATA</h1>
+                <h1 className={styles.title}>
+                    Upss... ha ocurrido un error. Intentelo más tarde!
+                </h1>
             </div>
         );
     }
+
     return (
         <div className={styles.container}>
-            <div className={styles.imageContainer}>
-                <img src={`${IMAGE_URL_BASE}${poster_path}`} className={styles.poster} />
-            </div>
-            <div className={styles.details}>
+            <div className={styles.titlePage}>
                 <h1 className={styles.title}>{title}</h1>
-                <p className={styles.overview}>{overview}</p>
-                <div className={styles.infoContainer}>
+            </div>
+            <div className={styles.movieContainer}>
+                <div className={styles.imageContainer}>
+                    <img
+                        src={`${IMAGE_URL_BASE}${poster_path}`}
+                        alt={title}
+                        className={styles.image}
+                    />
+                    {!user ? (
+                        <Link to={LOGIN_URL} className={styles.link}>
+                            <button className={styles.favoriteButton}>
+                                Login to add to Favorites
+                            </button>
+                        </Link>
+                    ) : (
+                        <button className={styles.favoriteButton} onClick={handleFavoriteClick}>
+                            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                        </button>
+                    )}
+                </div>
+
+                <div className={styles.detailsContainer}>
+                    <h2 className={styles.subtitle}>Sinópsis</h2>
+                    <p className={styles.overview}>{overview}</p>
                     <div className={styles.info}>
-                        <h3 className={styles.infoTitle}>Original Language</h3>
-                        <p className={styles.infoValue}>{original_language}</p>
-                        <h3 className={styles.infoTitle}>Release Date</h3>
-                        <p className={styles.infoValue}>{release_date}</p>
-                        <h3 className={styles.infoTitle}>Runtime</h3>
-                        <p className={styles.infoValue}>{runtime}</p>
-                        <h3 className={styles.infoTitle}>Status</h3>
-                        <p className={styles.infoValue}>{status}</p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Fecha de estreno:</span> {release_date}
+                        </p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Duración:</span> {runtime} minutes
+                        </p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Estatus:</span> {status}
+                        </p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Idiomas:</span>{" "}
+                            {spoken_languages &&
+                                spoken_languages.map((language) => language.name).join(", ")}
+                        </p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Géneros:</span>{" "}
+                            {genres && genres.map((genre) => genre.name).join(", ")}
+                        </p>
+                        <p className={styles.infoItem}>
+                            <span className={styles.infoTitle}>Actores:</span>{" "}
+                            {actors &&
+                                actors.map((actor) => actor.name).join(", ")}
+                        </p>
+                        {director && (
+                            <p className={styles.infoItem}>
+                                <span className={styles.infoTitle}>Director:</span>{" "}
+                                {director.name}
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

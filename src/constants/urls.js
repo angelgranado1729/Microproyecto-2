@@ -1,5 +1,3 @@
-// Links de todas las rutas de la aplicación
-
 export const HOME_URL = "/";
 export const LOGIN_URL = "/login";
 export const REGISTER_URL = "/register";
@@ -10,5 +8,3 @@ export const MOVIE_DETAIL_URL = "/movies/:movie_id";
 export const ADMIN_URL = "/admin";
 export const RESERVE_URL = "/reserve";
 export const ERROR_404 = "*";
-export const MOVIES_DETAIL_URL =  (movieId = ":Id") =>
-`/movies/${movieId}`;

@@ -48,3 +48,16 @@ export async function fetchMovieDetail(movieId) {
     return null;
   }
 }
+
+export async function fetchMovieCredits(movieId) {
+  try {
+    const response = await fetch(
+      `${baseUrl}/movie/${movieId}/credits?language=es-US&api_key=${apiKey}`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
