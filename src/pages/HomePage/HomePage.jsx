@@ -37,7 +37,7 @@ export function HomePage() {
 
     useEffect(() => {
         // Fetch the list of images from the server (remember from firestore)
-        setImages([image1, image2, image3, image4, image5]);
+        setImages([image1, image2, image3, image4, image5 , image6, image7, image8]);
     }, []);
 
     const handleSearch = (query) => {
