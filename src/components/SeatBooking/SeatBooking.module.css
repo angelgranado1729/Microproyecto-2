@@ -5,11 +5,27 @@
   padding: 20px;
 }
 
+h1 {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
 .seat-map {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #ffffff;
 }
 
 .screen {
@@ -28,9 +44,13 @@
 .row {
   display: flex;
   gap: 10px;
+  justify-content: center;
 }
 
-.seat {
+.seat,
+.availablelegend,
+.occupiedlegend,
+.selectedlegend {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,20 +62,13 @@
   transition: background-color 0.3s;
 }
 
-.seat:hover {
-  transform: scale3d(1.1, 1.1, 1.1);
-  background-color: #50504e;
-  transition: 0.2s;
-  color: white;
-}
-
-.selected {
-  background-color: #f57777;
+.selected,
+.selectedlegend {
+  background-color: #8bc34a;
   color: white;
 }
 
 .selected:hover {
-  background-color: #f57777;
   filter: brightness(110%);
 }
 
@@ -74,4 +87,79 @@
 .selected-seats span {
   margin: 5px;
   white-space: nowrap;
+}
+
+.occupied,
+.occupiedlegend {
+  background-color: red;
+  pointer-events: none;
+  color: white;
+  cursor: pointer;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.legendItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+  color: #ffffff;
+}
+
+.selected-seats-container {
+  display: flex;
+  justify-content: center;
+}
+
+.selected-seats {
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noSeatsSelected {
+  margin: 0;
+}
+
+.confirmButton {
+  display: block;
+  width: 350px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #03a9f4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.confirmButton:hover {
+  background-color: #0288d1;
+  transform: scale(1.05);
+  transition: 0.2s;
+}
+
+.disabledButton {
+  background-color: #999999;
+  cursor: not-allowed;
+  display: block;
+  width: 350px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }

@@ -14,6 +14,7 @@ import image5 from "../../assets/image5.jpeg";
 import image6 from "../../assets/image6.jpeg";
 import image7 from "../../assets/image7.jpeg";
 import image8 from "../../assets/image8.jpeg";
+import { createFuncion, getFuncionById, getFunciones, handleFunciones } from "../../utils/fireStoreHelpers";
 
 export function HomePage() {
     const [images, setImages] = useState([]);
@@ -29,15 +30,12 @@ export function HomePage() {
 
     useEffect(() => {
         getNowPlayingMovies();
-    }, [getNowPlayingMovies]);
-
-    useEffect(() => {
         getUpComingMovies();
-    }, [getUpComingMovies]);
+    }, []);
 
     useEffect(() => {
         // Fetch the list of images from the server (remember from firestore)
-        setImages([image1, image2, image3, image4, image5]);
+        setImages([image1, image2, image3, image4, image5, image6, image7, image8]);
     }, []);
 
     const handleSearch = (query) => {
@@ -51,6 +49,23 @@ export function HomePage() {
         const query = searchQuery.toLowerCase();
         return title.includes(query) && allMovies.findIndex((m) => m.id === movie.id) === index;
     });
+
+    const loadFunciones = async () => {
+        filteredMovies.forEach(async (movie) => {
+            if (!upComingMovies.some((m) => m.id === movie.id)) {
+                const funct = await getFuncionById(String(movie.id));
+                if (!funct) {
+                    await createFuncion(String(movie.id), movie.title, false);
+                }
+            }
+        });
+    };
+
+
+    useEffect(() => {
+        loadFunciones();
+    }, [filteredMovies]);
+
 
     return (
         <div className={styles.container}>

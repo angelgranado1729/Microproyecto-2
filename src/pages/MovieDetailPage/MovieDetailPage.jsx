@@ -1,20 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useMovies } from "../../hooks/useMovies";
 import styles from "./MovieDetailPage.module.css";
 import { Loading } from "../../components/Loading/Loading";
 import { useUserContext } from "../../contexts/UserContext";
 import { LOGIN_URL, RESERVE_URL } from "../../constants/urls";
+import { getFuncionById } from "../../utils/fireStoreHelpers";
 
 export function MovieDetailPage() {
     const IMAGE_URL_BASE = "https://www.themoviedb.org/t/p/w220_and_h330_face";
     const { movie_id } = useParams();
+    const [isLoadingFS, setIsLoadingFS] = useState(false);
     const {
         isLoading,
         getMovieDetails,
         movieDetails,
         movieCredits,
         getMovieCredits,
+        upComingMovies,
+        getUpComingMovies,
     } = useMovies();
 
     const { user } = useUserContext();
@@ -39,9 +43,90 @@ export function MovieDetailPage() {
     useEffect(() => {
         if (!isLoading && movie_id) {
             getMovieDetails(movie_id);
+            getUpComingMovies();
             getMovieCredits(movie_id);
         }
     }, []);
+
+    const isUpComingMovie = upComingMovies.some(
+        (movie) => movie.id === parseInt(movie_id)
+    );
+
+
+    const seatsCountRef = useRef(null);
+
+    const numberOfSeats = async () => {
+        if (!isUpComingMovie) {
+            const funcion = await getFuncionById(String(movie_id));
+            const asientos = funcion.boletos_vendidos;
+            if (asientos) {
+                console.log(asientos.length);
+                return asientos.length;
+            }
+        }
+        return -1;
+    };
+
+    useEffect(() => {
+        if (!isUpComingMovie) {
+            const getNumberOfSeats = async () => {
+                const num = await numberOfSeats();
+                console.log(num);
+                seatsCountRef.current = num;
+            };
+            getNumberOfSeats();
+        }
+    }, []);
+
+    // Acceder al valor de seatsCount a través de seatsCountRef.current
+    console.log(seatsCountRef.current);
+
+    const getReservationButton = () => {
+        if (isUpComingMovie) {
+            return <div className={styles.upcomingButton}>Próximamente</div>;
+        } else {
+            if (seatsCountRef.current >= 20) {
+                return <div className={styles.reserveButonAgotado}>Agotado</div>;
+            } else {
+                if (user) {
+                    return (
+                        <Link to={RESERVE_URL.replace(":movie_id", movie_id)} className={styles.link}>
+                            <button className={styles.reserveButton}>Reserve</button>
+                        </Link>
+                    );
+                } else {
+                    return (
+                        <Link to={LOGIN_URL} className={styles.link}>
+                            <button className={styles.reserveButton}>
+                                Login to Reserve
+                            </button>
+                        </Link>
+                    );
+                }
+            }
+        }
+    };
+
+    const getFavButton = () => {
+        if (user) {
+            return (
+                <button
+                    className={styles.favoriteButton}
+                    onClick={handleFavoriteClick}
+                >
+                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                </button>
+            );
+        } else {
+            return (
+                <Link to={LOGIN_URL} className={styles.link}>
+                    <button className={styles.favoriteButton}>
+                        Login to add to Favorites
+                    </button>
+                </Link>
+            );
+        }
+    };
 
     const actors = movieCredits?.cast;
     const director =
@@ -80,31 +165,8 @@ export function MovieDetailPage() {
                         alt={title}
                         className={styles.image}
                     />
-                    {!user ? (
-                        <Link to={LOGIN_URL} className={styles.link}>
-                            <button className={styles.favoriteButton}>
-                                Login to add to Favorites
-                            </button>
-                        </Link>
-                    ) : (
-                        <button
-                            className={styles.favoriteButton}
-                            onClick={handleFavoriteClick}
-                        >
-                            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-                        </button>
-                    )}
-                    {user ? (
-                        <Link to={RESERVE_URL} className={styles.link}>
-                            <button className={styles.reserveButton}>Reserve</button>
-                        </Link>
-                    ) : (
-                        <Link to={LOGIN_URL} className={styles.link}>
-                            <button className={styles.reserveButton}>
-                                Login to Reserve
-                            </button>
-                        </Link>
-                    )}
+                    {getFavButton()}
+                    {getReservationButton()}
                 </div>
 
                 <div className={styles.detailsContainer}>

@@ -43,9 +43,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
           <Route path={UPCOMING_MOVIES_URL}
             element={
-              <PublicRoute>
-                <UpComingPage />
-              </PublicRoute>
+
+              <UpComingPage />
+
             }
           />
 

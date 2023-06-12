@@ -6,5 +6,5 @@ export const UPCOMING_MOVIES_URL = "/upcoming";
 export const NOW_PLAYING_MOVIES_URL = "/now-playing";
 export const MOVIE_DETAIL_URL = "/movies/:movie_id";
 export const ADMIN_URL = "/admin";
-export const RESERVE_URL = "/reserve";
+export const RESERVE_URL = "/reserve/:movie_id";
 export const ERROR_404 = "*";
