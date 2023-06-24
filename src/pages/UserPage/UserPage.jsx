@@ -6,6 +6,7 @@ import { PosterMovie } from '../../components/PosterMovie/PosterMovie';
 import { ReserveInfo } from '../../components/ReserveInfo/ReserveInfo';
 import { getActualUserById } from '../../utils/fireStoreHelpers';
 import { Loading } from '../../components/Loading/Loading';
+
 export function UserPage() {
   const { user } = useUserContext();
   const {
@@ -15,6 +16,8 @@ export function UserPage() {
 
   const [reservas, setReservas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +31,7 @@ export function UserPage() {
       }
     };
     fetchData();
-
-  }, []);
+  }, [user]);
 
   const renderFavoriteMovies = () => {
     if (moviesByIds.length === 0) {
@@ -65,6 +67,7 @@ export function UserPage() {
     );
   };
 
+
   if (isLoading) {
     return <Loading />;
   }
@@ -75,5 +78,4 @@ export function UserPage() {
       {renderReserves()}
     </div>
   );
-
 }

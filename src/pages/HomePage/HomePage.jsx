@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { ImageCarousel } from "../../components/ImageCarousel/ImageCarousel";
 import { Card } from "../../components/Card/Card";
 import { useMovies } from "../../hooks/useMovies";
-import SearchBar from "../../components/SearchBar/SearchBar";
 import { Loading } from "../../components/Loading/Loading";
 import styles from "./HomePage.module.css";
 import image1 from "../../assets/image1.jpeg";
@@ -18,53 +17,70 @@ import { createFuncion, getFuncionById } from "../../utils/fireStoreHelpers";
 export function HomePage() {
     const [images, setImages] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
+    const [queryResult, setQueryResult] = useState([]);
+    const [isFetching, setIsFetching] = useState(false);
     const {
-        isLoading,
         nowPlayingMovies,
         getNowPlayingMovies,
         upComingMovies,
         getUpComingMovies,
-    } = useMovies();
+        queryMovies,
+        getQueryMovies } = useMovies();
 
     useEffect(() => {
         getNowPlayingMovies();
         getUpComingMovies();
-    }, []);
-
-    useEffect(() => {
-        // Fetch the list of images from the server (remember from firestore)
+        loadFunciones();
         setImages([image1, image2, image3, image4, image5, image6, image7, image8]);
     }, []);
 
-    const handleSearch = (query) => {
-        setSearchQuery(query);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery) {
+            fetchMovies(searchQuery);
+        } else {
+            setQueryResult([]);
+            setSearchQuery("");
+        }
+    };
+
+    const fetchMovies = async (query) => {
+        setIsFetching(true);
+        await getQueryMovies(query);
+        setQueryResult(queryMovies);
+        setIsFetching(false);
     };
 
     const allMovies = [...nowPlayingMovies, ...upComingMovies];
-
-    const filteredMovies = allMovies.filter((movie, index) => {
-        const title = movie.title.toLowerCase();
-        const query = searchQuery.toLowerCase();
-        return title.includes(query) && allMovies.findIndex((m) => m.id === movie.id) === index;
-    });
-
     const loadFunciones = async () => {
-        filteredMovies.forEach(async (movie) => {
+        for (const movie of allMovies) {
             if (!upComingMovies.some((m) => m.id === movie.id)) {
                 const funct = await getFuncionById(String(movie.id));
                 if (!funct) {
                     await createFuncion(String(movie.id), movie.title, false);
                 }
             }
-        });
+        }
+    };
+    const renderMovies = () => {
+        if (isFetching) {
+            return <Loading />;
+        } else {
+            if (queryResult.length > 0) {
+                return queryResult.map((movie) => <Card movie={movie} key={movie.id} />);
+            } else {
+                return allMovies.map((movie) => <Card movie={movie} key={movie.id} />);
+            }
+        }
     };
 
-
     useEffect(() => {
-        loadFunciones();
-    }, [filteredMovies]);
-
+        if (searchQuery) {
+            fetchMovies(searchQuery);
+        } else {
+            setQueryResult([]);
+        }
+    }, [searchQuery]);
 
     return (
         <div className={styles.container}>
@@ -72,19 +88,20 @@ export function HomePage() {
                 <ImageCarousel images={images} />
             </div>
             <div className={styles.searchBarContainer}>
-                <SearchBar onSearch={handleSearch} />
+                <form onSubmit={handleSearch} className={styles.searchForm}>
+                    <input
+                        type="text"
+                        placeholder="Search movies..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className={styles.searchInput}
+                    />
+                    <button type="submit" className={styles.searchButton}>
+                        Search
+                    </button>
+                </form>
             </div>
-            <div className={styles.moviesContainer}>
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <>
-                        {filteredMovies.map((movie) => (
-                            <Card movie={movie} key={movie.id} />
-                        ))}
-                    </>
-                )}
-            </div>
+            <div className={styles.moviesContainer}>{renderMovies()}</div>
         </div>
     );
 }

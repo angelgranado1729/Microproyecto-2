@@ -17,6 +17,7 @@ const SearchBar = ({ onSearch }) => {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         className={styles.searchInput}
+        onSubmit={handleSubmit}
       />
       <button type="submit" className={styles.searchButton}>
         Search

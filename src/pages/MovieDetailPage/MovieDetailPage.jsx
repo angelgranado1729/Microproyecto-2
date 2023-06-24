@@ -25,6 +25,8 @@ export function MovieDetailPage() {
         getMovieCredits,
         upComingMovies,
         getUpComingMovies,
+        getNowPlayingMovies,
+        nowPlayingMovies,
     } = useMovies();
 
     const {
@@ -62,6 +64,7 @@ export function MovieDetailPage() {
             getMovieDetails(movie_id);
             getUpComingMovies();
             getMovieCredits(movie_id);
+            getNowPlayingMovies();
             if (user) {
                 const fetchFavoriteMovie = async () => {
                     setIsLoadingFS(true);
@@ -87,7 +90,7 @@ export function MovieDetailPage() {
     const numberOfSeats = async () => {
         if (!isUpComingMovie) {
             const funcion = await getFuncionById(String(movie_id));
-            const asientos = funcion.boletos_vendidos;
+            const asientos = funcion?.boletos_vendidos; // Agrega una validación para funcion
             if (asientos) {
                 console.log(asientos.length);
                 return asientos.length;
@@ -95,6 +98,7 @@ export function MovieDetailPage() {
         }
         return -1;
     };
+
 
     useEffect(() => {
         if (!isUpComingMovie) {
@@ -112,23 +116,25 @@ export function MovieDetailPage() {
         if (isUpComingMovie) {
             return <div className={styles.upcomingButton}>Próximamente</div>;
         } else {
-            if (isSeatsCountLoading) {
-                return <Loading />;
-            } else if (seatsCountRef.current >= 20) {
-                return <div className={styles.reserveButonAgotado}>Agotado</div>;
-            } else {
-                if (user) {
-                    return (
-                        <Link to={RESERVE_URL.replace(":movie_id", movie_id)} className={styles.link}>
-                            <button className={styles.reserveButton}>Reserve</button>
-                        </Link>
-                    );
+            if (nowPlayingMovies.some((movie) => movie.id === parseInt(movie_id))) {
+                if (isSeatsCountLoading) {
+                    return <Loading />;
+                } else if (seatsCountRef.current >= 20) {
+                    return <div className={styles.reserveButonAgotado}>Agotado</div>;
                 } else {
-                    return (
-                        <Link to={LOGIN_URL} className={styles.link}>
-                            <button className={styles.reserveButton}>Login to Reserve</button>
-                        </Link>
-                    );
+                    if (user) {
+                        return (
+                            <Link to={RESERVE_URL.replace(":movie_id", movie_id)} className={styles.link}>
+                                <button className={styles.reserveButton}>Reserve</button>
+                            </Link>
+                        );
+                    } else {
+                        return (
+                            <Link to={LOGIN_URL} className={styles.link}>
+                                <button className={styles.reserveButton}>Login to Reserve</button>
+                            </Link>
+                        );
+                    }
                 }
             }
         }

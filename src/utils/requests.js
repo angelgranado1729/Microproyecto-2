@@ -65,7 +65,7 @@ export async function fetchMovieCredits(movieId) {
 export async function fetchSearchMovies(title) {
   try {
     const response = await fetch(
-      `${baseUrl}/search/movie?language=es-US&query=${title}&page=1&include_adult=false&api_key=${apiKey}`
+      `${baseUrl}/search/movie?language=es-US&query=${title}&api_key=${apiKey}`
     );
     const data = await response.json();
     return data.results;

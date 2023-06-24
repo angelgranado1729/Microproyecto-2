@@ -5,6 +5,7 @@ import {
     fetchNowPlayingMovies,
     fetchMovieCredits,
     fetchMoviesByIds,
+    fetchSearchMovies,
 } from "../utils/requests";
 
 export function useMovies() {
@@ -14,6 +15,7 @@ export function useMovies() {
     const [movieDetails, setMovieDetails] = useState(null);
     const [movieCredits, setMovieCredits] = useState([]);
     const [moviesByIds, setMoviesByIds] = useState([]);
+    const [queryMovies, setQueryMovies] = useState([]);
 
     const getUpComingMovies = useCallback(async () => {
         try {
@@ -70,6 +72,19 @@ export function useMovies() {
         }
     }, []);
 
+    const getQueryMovies = useCallback(async (query) => {
+        try {
+            setIsLoading(true);
+            const data = await fetchSearchMovies(query);
+            setQueryMovies(data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("FAILED GET MOVIE DETAILS", error);
+        }
+
+    }, []);
+
+
     return {
         isLoading,
         upComingMovies,
@@ -77,10 +92,12 @@ export function useMovies() {
         movieDetails,
         movieCredits,
         moviesByIds,
+        queryMovies,
         getUpComingMovies,
         getNowPlayingMovies,
         getMovieDetails,
         getMovieCredits,
         getMoviesByIds,
+        getQueryMovies,
     };
 }
