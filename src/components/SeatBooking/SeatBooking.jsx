@@ -4,6 +4,8 @@ import { upDateBoletosVendidos } from '../../utils/fireStoreHelpers';
 import { useNavigate } from 'react-router-dom';
 import { HOME_URL } from '../../constants/urls';
 import { Loading } from "../../components/Loading/Loading";
+import { useUserContext } from "../../contexts/UserContext";
+import { reserve } from '../../utils/fireStoreHelpers';
 
 export function SeatBooking({ asientosOcupados, price, movieId }) {
     const maxCapacity = 5;
@@ -11,6 +13,7 @@ export function SeatBooking({ asientosOcupados, price, movieId }) {
     const [totalPrice, setTotalPrice] = useState(0);
     const [isMapLoading, setIsMapLoading] = useState(true);
     const navigate = useNavigate();
+    const { user } = useUserContext();
 
     useEffect(() => {
         const calculateTotalPrice = () => {
@@ -79,6 +82,7 @@ export function SeatBooking({ asientosOcupados, price, movieId }) {
     const handleConfirmReservation = async () => {
         try {
             await upDateBoletosVendidos(movieId, selectedSeats);
+            reserve(user.id, movieId, selectedSeats, totalPrice)
             navigate(HOME_URL);
             alert(`Ha reservado ${selectedSeats.length} asientos por un total de $${totalPrice.toFixed(3)}`);
         } catch (error) {

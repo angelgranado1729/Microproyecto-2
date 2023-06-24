@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "microproyecto-2-25a01"
-  }
+    "default": "microproyecto-2-25a01",
+    "v2": "microproyecto-2-25a01"
+  },
+  "targets": {},
+  "etags": {}
 }

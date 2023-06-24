@@ -5,4 +5,37 @@
   justify-content: center;
   min-height: 100vh;
   background-color: #1b1b1b;
+  padding: 20px;
+}
+
+.favoriteMoviesContainer {
+  margin-top: 20px;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.movieGrid {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 10px));
+  align-items: center;
+  justify-content: center;
+  column-gap: 4px;
+  row-gap: 2px;
+  width: 90vw;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+p {
+  font-size: 16px;
+  color: gray;
 }

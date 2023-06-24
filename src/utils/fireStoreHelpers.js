@@ -1,12 +1,12 @@
 import {
   getDocs,
   collection,
-  addDoc,
   doc,
   getDoc,
   setDoc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 
@@ -87,5 +87,93 @@ export async function handleFunciones(movie_Id, title_movie) {
   } catch (error) {
     console.error("Error al obtener la función:", error);
     throw new Error("Error al obtener la función");
+  }
+}
+
+export async function addFavoriteMovie(userId, movieId) {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      favoriteMovies: arrayUnion(movieId),
+    });
+    console.log("Película agregada a la lista de favoritos del usuario");
+  } catch (error) {
+    console.error(
+      "Error al agregar la película a la lista de favoritos:",
+      error
+    );
+    throw new Error("Error al agregar la película a la lista de favoritos");
+  }
+}
+
+export async function removeFavoriteMovie(userId, movieId) {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      favoriteMovies: arrayRemove(movieId),
+    });
+    console.log("Película eliminada de la lista de favoritos del usuario");
+  } catch (error) {
+    console.error(
+      "Error al eliminar la película de la lista de favoritos:",
+      error
+    );
+    throw new Error("Error al eliminar la película de la lista de favoritos");
+  }
+}
+
+export async function getFavoriteMovieById(user_id, movie_id) {
+  try {
+    const userRef = doc(db, "users", user_id);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      const user = docSnap.data();
+      const favoriteMovies = user.favoriteMovies;
+      if (favoriteMovies.includes(movie_id)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al obtener la película favorita por ID:", error);
+    throw new Error("Error al obtener la película favorita por ID");
+  }
+}
+
+export async function reserve(userId, movieId, asientos, total) {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      reserves: arrayUnion({
+        movieId: movieId,
+        asientos: asientos,
+        total: total,
+      }),
+    });
+    console.log("Reserva agregada al usuario");
+  } catch (error) {
+    console.error("Error al agregar la reserva al usuario:", error);
+    throw new Error("Error al agregar la reserva al usuario");
+  }
+}
+
+export async function getActualUserById(user_id) {
+  try {
+    const userRef = doc(db, "users", user_id);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al obtener el usuario por ID:", error);
+    throw new Error("Error al obtener el usuario por ID");
   }
 }

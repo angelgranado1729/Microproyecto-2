@@ -5,9 +5,15 @@ import styles from "./MovieDetailPage.module.css";
 import { Loading } from "../../components/Loading/Loading";
 import { useUserContext } from "../../contexts/UserContext";
 import { LOGIN_URL, RESERVE_URL } from "../../constants/urls";
-import { getFuncionById } from "../../utils/fireStoreHelpers";
+import {
+    getFuncionById,
+    addFavoriteMovie,
+    removeFavoriteMovie,
+    getFavoriteMovieById
+} from "../../utils/fireStoreHelpers";
 
 export function MovieDetailPage() {
+    const { user } = useUserContext();
     const IMAGE_URL_BASE = "https://www.themoviedb.org/t/p/w220_and_h330_face";
     const { movie_id } = useParams();
     const [isLoadingFS, setIsLoadingFS] = useState(false);
@@ -21,8 +27,6 @@ export function MovieDetailPage() {
         getUpComingMovies,
     } = useMovies();
 
-    const { user } = useUserContext();
-
     const {
         spoken_languages,
         genres,
@@ -35,10 +39,22 @@ export function MovieDetailPage() {
     } = movieDetails || {};
 
     const [isFavorite, setIsFavorite] = useState(false);
-    const [isSeatsCountLoading, setIsSeatsCountLoading] = useState(true);
+    const [isSeatsCountLoading, setIsSeatsCountLoading] = useState(false);
 
-    const handleFavoriteClick = () => {
-        setIsFavorite(!isFavorite);
+    const handleFavoriteClick = async () => {
+        if (user) {
+            setIsFavorite(!isFavorite);
+
+            try {
+                if (!isFavorite) {
+                    await addFavoriteMovie(user.id, movie_id, title);
+                } else {
+                    await removeFavoriteMovie(user.id, movie_id);
+                }
+            } catch (error) {
+                console.error("Error al agregar/quitar la película de favoritos:", error);
+            }
+        }
     };
 
     useEffect(() => {
@@ -46,13 +62,25 @@ export function MovieDetailPage() {
             getMovieDetails(movie_id);
             getUpComingMovies();
             getMovieCredits(movie_id);
+            if (user) {
+                const fetchFavoriteMovie = async () => {
+                    setIsLoadingFS(true);
+                    try {
+                        const favMovie = await getFavoriteMovieById(user.id, movie_id);
+                        setIsFavorite(!!favMovie);
+                    } catch (error) {
+                        console.error("Error al obtener la película favorita:", error);
+                    }
+                    setIsLoadingFS(false);
+                };
+                fetchFavoriteMovie();
+            }
         }
-    }, []);
+    }, [isLoading, movie_id, user]);
 
     const isUpComingMovie = upComingMovies.some(
         (movie) => movie.id === parseInt(movie_id)
     );
-
 
     const seatsCountRef = useRef(null);
 
@@ -73,7 +101,6 @@ export function MovieDetailPage() {
             const getNumberOfSeats = async () => {
                 setIsSeatsCountLoading(true);
                 const num = await numberOfSeats();
-                console.log(num);
                 seatsCountRef.current = num;
                 setIsSeatsCountLoading(false);
             };
@@ -99,9 +126,7 @@ export function MovieDetailPage() {
                 } else {
                     return (
                         <Link to={LOGIN_URL} className={styles.link}>
-                            <button className={styles.reserveButton}>
-                                Login to Reserve
-                            </button>
+                            <button className={styles.reserveButton}>Login to Reserve</button>
                         </Link>
                     );
                 }
@@ -115,6 +140,7 @@ export function MovieDetailPage() {
                 <button
                     className={styles.favoriteButton}
                     onClick={handleFavoriteClick}
+                    disabled={isLoadingFS}
                 >
                     {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                 </button>
@@ -122,9 +148,7 @@ export function MovieDetailPage() {
         } else {
             return (
                 <Link to={LOGIN_URL} className={styles.link}>
-                    <button className={styles.favoriteButton}>
-                        Login to add to Favorites
-                    </button>
+                    <button className={styles.favoriteButton}>Login to add to Favorites</button>
                 </Link>
             );
         }
@@ -148,9 +172,7 @@ export function MovieDetailPage() {
     if (!movieDetails && !isLoading) {
         return (
             <div className={styles.container}>
-                <h1 className={styles.title}>
-                    Upss... ha ocurrido un error. Intentelo más tarde!
-                </h1>
+                <h1 className={styles.title}>Upss... ha ocurrido un error. Intentelo más tarde!</h1>
             </div>
         );
     }
@@ -176,8 +198,7 @@ export function MovieDetailPage() {
                     <p className={styles.overview}>{overview}</p>
                     <div className={styles.info}>
                         <p className={styles.infoItem}>
-                            <span className={styles.infoTitle}>Fecha de estreno:</span>{" "}
-                            {release_date}
+                            <span className={styles.infoTitle}>Fecha de estreno:</span> {release_date}
                         </p>
                         <p className={styles.infoItem}>
                             <span className={styles.infoTitle}>Duración:</span> {runtime} minutes

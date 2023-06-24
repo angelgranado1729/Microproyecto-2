@@ -63,7 +63,8 @@ export function LoginPage() {
         <div className={styles.container}>
             <form className={styles.form} onSubmit={onSubmit}>
                 <h1 className={styles.title}>Iniciar sesión</h1>
-                <p className={styles.welcomeTxt}>Descubre tus películas favoritas en los auditorios de la Universidad Metropolitana</p>
+                <p className={styles.welcomeTxt}>Descubre tus películas favoritas en
+                    los auditorios de la Universidad Metropolitana</p>
 
                 {/* EMAIL FIELD */}
                 <div
@@ -81,9 +82,7 @@ export function LoginPage() {
                         onChange={onChange}
                         onClick={handleEmailClick}
                     />
-                    {errors.email && (
-                        <span className={styles.errorMsg}>Por favor ingresa un correo electrónico.</span>
-                    )}
+
                 </div>
 
                 {/* PASSWORD FIELD */}
