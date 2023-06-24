@@ -39,7 +39,7 @@ export function ReserveInfo({ reserve }) {
                                 {seats && seats.join(", ")}
                             </span>
                             <span className={styles.infoTitle}>Total:</span>
-                            <span>{reserve.total}</span>
+                            <span>${reserve.total}</span>
                             <div className={styles.linkContainer}></div>
                         </div>
                     </div>
